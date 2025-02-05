@@ -4,7 +4,7 @@ import { motion } from "framer-motion"; // Framer Motion
 import Image from "next/image";
 // import Link from 'next/link';
 import { useState, useEffect } from "react";
-const RPC = require('discord-rpc');
+// const RPC = require('discord-rpc');
 import { Client } from 'discord-rpc';
 
 import dynamic from "next/dynamic";
@@ -429,7 +429,7 @@ const RadioPage = () => {
   // Discord RPC
   const scopes = ['rpc', 'rpc.api', 'messages.read', 'activities.write', 'activities.read'];
 
-  let client = new Client({ transport: 'ipc', scopes });
+  const client = new Client({ transport: 'ipc', scopes });
   client.login({ clientId: id }).catch(console.error);
   client.on('ready', () => {
     client.setActivity({

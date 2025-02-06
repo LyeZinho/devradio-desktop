@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Lo-fi girl",
+    "url": "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+    "alternates": [""],
+    "isVideo": false,
+    "tags": ["lofi"],
+    "image": "/assets/radio/avatar/lofigirl.png"
+  },
+  {
+    "name": "Synthwave radio",
+    "url": "https://www.youtube.com/watch?v=4xDzrJKXOOY",
+    "alternates": [""],
+    "isVideo": false,
+    "tags": ["synthwave", "lofi"],
+    "image": "/assets/radio/avatar/lofigirl.png"
+  },
+  {
+    "name": "Lofi Girl Medieval Fantasy",
+    "url": "",
+    "tags": ["medievallofi"],
+    "alternates": [""],
+    "isVideo": true,
+    "image": "/assets/radio/avatar/lofigirl.png"
+  },
+  {
+    "name": "Doom Music",
+    "url": "https://www.youtube.com/watch?v=JEuAYnjtJP0",
+    "tags": ["metal"],
+    "alternates": [""],
+    "isVideo": false,
+    "image": "/assets/radio/avatar/doommusic.png"
+  },
+  {
+    "name": "MineCraft Chill Music",
+    "url": "https://www.youtube.com/watch?v=ANkxRGvl1VY",
+    "tags": ["minecraft"],
+    "alternates": [""],
+    "isVideo": true,
+    "image": "/assets/radio/avatar/minemuisic.png"
+  },
+  {
+    "name": "MedievaLofi",
+    "url": "https://youtu.be/eEZF9iIv5XM",
+    "tags": ["medievallofi"],
+    "alternates": [""],
+    "isVideo": false,
+    "image": "/assets/radio/avatar/medievallofi.jpg"
+  },
+  {
+    "name": "90s City Pop",
+    "url": "https://www.youtube.com/watch?v=zXHS92Nirfo",
+    "tags": ["citypop90s"],
+    "alternates": ["https://www.youtube.com/watch?v=rThoOgLws_c"],
+    "isVideo": true,
+    "image": "/assets/radio/avatar/animastudio.jpg"
+  },
+  {
+    "name": "70s City Pop",
+    "url": "https://www.youtube.com/watch?v=wc_yZjn8JWs",
+    "tags": ["citypop70s"],
+    "alternates": [""],
+    "isVideo": false,
+    "image": "/assets/radio/avatar/animastudio.jpg"
+  }
+]

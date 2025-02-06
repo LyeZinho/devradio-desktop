@@ -2,11 +2,8 @@
 
 import { motion } from "framer-motion"; // Framer Motion
 import Image from "next/image";
-// import Link from 'next/link';
 import { useState, useEffect } from "react";
-// const RPC = require('discord-rpc');
 import { Client } from "discord-rpc";
-
 import dynamic from "next/dynamic";
 
 const ReactPlayer = dynamic(() => import("react-player/youtube"), {
@@ -19,234 +16,25 @@ import {
   FaPause,
   FaVolumeMute,
   FaVolumeUp,
-  // FaPlayCircle,
 } from "react-icons/fa";
 import { LuRadioTower } from "react-icons/lu";
-// Link to another page icon
 import { FiExternalLink } from "react-icons/fi";
 import { FiSkipForward } from "react-icons/fi";
 import { FiSkipBack } from "react-icons/fi";
 
+// Extra icons
+import { FiSun } from "react-icons/fi";
+import { FiSunrise } from "react-icons/fi";
+import { FiSunset } from "react-icons/fi";
 
-import { Button, For, HStack } from "@chakra-ui/react"
-import {
-  DrawerActionTrigger,
-  DrawerBackdrop,
-  DrawerBody,
-  DrawerCloseTrigger,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerRoot,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@chakra-ui/react"
-
-// Simple Pomodoro Clock Component
-// For productivity while listening to music
-interface PomodoroClockProps {
-  handlePause: () => void;
-}
-
-const PomodoroClock: React.FC<PomodoroClockProps> = ({ handlePause }) => {
-  const [time, setTime] = useState(25 * 60); // 25 minutes in seconds
-  const [isRunning, setIsRunning] = useState(false);
-  const [isBreak, setIsBreak] = useState(false);
-  const [pauseMusicOnBreak, setPauseMusicOnBreak] = useState(true);
-
-  // Format time as MM:SS
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}`;
-  };
-
-  // Timer logic
-  useEffect(() => {
-    if (isRunning) {
-      const timer = setInterval(() => {
-        setTime((prevTime) => {
-          if (prevTime <= 0) {
-            setIsBreak((prevIsBreak) => !prevIsBreak); // Switch between work and break
-            // handlePause(); // Pause the music when the timer runs out
-            if (pauseMusicOnBreak) {
-              handlePause();
-              // Also stop the timer
-              setIsRunning(false);
-            }
-            return isBreak ? 25 * 60 : 5 * 60; // Reset to work (25 mins) or break (5 mins)
-            // handlePause(); // Pause the music when the timer runs out
-          }
-          return prevTime - 1;
-        });
-      }, 1000);
-
-      return () => clearInterval(timer); // Cleanup on component unmount or state change
-    }
-  }, [isRunning, isBreak]);
-
-  // Handlers
-  const handleStartPause = () => setIsRunning((prev) => !prev);
-  const handleReset = () => {
-    setIsRunning(false);
-    setTime(25 * 60); // Reset to 25 minutes
-    setIsBreak(false);
-  };
-
-  return (
-    <motion.div
-      className="flex flex-col gap-4
-        fixed bottom-0 right-0 p-4 m-4 rounded-lg shadow-lg
-        "
-      style={{ zIndex: 1000 }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <h1
-        className="
-        text-xl
-        lg:text-3xl
-        font-jetbrains"
-      >
-        Pomodoro Clock
-      </h1>
-      <div className="flex gap-4 items-center">
-        <button onClick={handleStartPause} className="text-2xl font-jetbrains">
-          {isRunning ? <FaPause size={20} /> : <FaPlay size={20} />}
-        </button>
-        <button onClick={handleReset} className="text-2xl font-jetbrains">
-          Reset
-        </button>
-        <div className="flex gap-2 items-center aling-center">
-          <input
-            type="checkbox"
-            checked={pauseMusicOnBreak}
-            onChange={() => setPauseMusicOnBreak((prev) => !prev)}
-          />
-          <label>Pause music on break</label>
-        </div>
-      </div>
-      <div className="text-2xl font-jetbrains">
-        {formatTime(time)} {isBreak ? "Break" : "Work"}
-      </div>
-    </motion.div>
-  );
-};
-
-/*
-{
-    "menuLabel": "Music",
-    "bookmarks": [
-        {
-            "title": "lofi.cafe",
-            "url": "https://lofi.cafe/",
-            "type": "link",
-            "shortcut": "Cmd+1"
-        },
-        {
-            "title": "beats to relax/study to - lofi girl",
-            "url": "https://www.youtube.com/watch?v=jfKfPfyJRdk",
-            "type": "link",
-            "shortcut": "Cmd+2"
-        },
-        {
-            "title": "beats to sleep/chill to - lofi girl",
-            "url": "https://www.youtube.com/watch?v=rUxyKA_-grg",
-            "type": "link",
-            "shortcut": "Cmd+3"
-        },
-        {
-            "title": "synthwave radio - lofi girl",
-            "url": "https://www.youtube.com/watch?v=4xDzrJKXOOY",
-            "type": "link",
-            "shortcut": "Cmd+4"
-        },
-        {
-            "title": "lonelyboy",
-            "url": "https://www.youtube.com/@lonelyboyxyz",
-            "type": "link"
-        },
-        {
-            "title": "lofi geek",
-            "url": "https://www.youtube.com/channel/UCyD59CI7beJDU493glZpxgA",
-            "type": "link"
-        },
-        {
-            "title": "LOFI Galaxy",
-            "url": "https://www.youtube.com/channel/UCgyqgNSc6XMv1Nidr-jDJeg",
-            "type": "link"
-        },
-        {
-            "title": "Lucid Rhythms",
-            "url": "https://www.youtube.com/@LucidRhythms",
-            "type": "link"
-        },
-        {
-            "type": "separator"
-        },
-        {
-            "title": "lofi ATC",
-            "url": "https://www.lofiatc.com/",
-            "type": "link"
-        },
-        {
-            "title": "lofi ATC - DTW",
-            "url": "https://www.lofiatc.com/?icao=KDTW",
-            "type": "link",
-            "shortcut": "Cmd+9"
-        },
-        {
-            "type": "separator"
-        },
-        {
-            "title": "Nature Relaxation",
-            "type": "link",
-            "url": "https://www.youtube.com/c/dhuting"
-        },
-        {
-            "title": "Primal Earth",
-            "type": "link",
-            "url": "https://www.youtube.com/@primalearth8951"
-        },
-        {
-            "title": "Cosmic Relaxation",
-            "type": "link",
-            "url": "https://www.youtube.com/watch?v=Y_plhk1FUQA"
-        },
-        {
-            "type": "separator"
-        },
-        {
-            "title": "RÜFÜS DU SOL Live from Joshua Tree",
-            "type": "link",
-            "url": "https://www.youtube.com/watch?v=Zy4KtD98S2c"
-        },
-        {
-            "title": "Lane 8 - Sunrise Set - Grand Lake, CO",
-            "type": "link",
-            "url": "https://www.youtube.com/watch?v=n_LcVqqHSY8"
-        },
-        {
-            "title": "Ambient Polyrhythms // Mandala ASMR Sounds",
-            "url": "https://www.youtube.com/watch?v=Ns1QVFlmtII",
-            "type": "link"
-        }
-    ]
-}
-*/
 type Backgrounds = {
   [key: string]: string[];
 };
 
 const backgrounds: Backgrounds = {
   lofi: [
-    // This are the tags that will be used to determine the background
     "/assets/radio/background/tokyo.gif",
     "/assets/radio/background/loficafe.gif",
-    // "/assets/radio/background/pixeltrain.gif"
   ],
   synthwave: [
     "/assets/radio/background/synthwave.gif",
@@ -260,107 +48,6 @@ const backgrounds: Backgrounds = {
   citypop70s: ["/assets/radio/background/citypoplofi.gif"],
 };
 
-const station = [
-  {
-    name: "Lo-fi girl",
-    url: "https://www.youtube.com/watch?v=jfKfPfyJRdk",
-    alternates: [""], // Extra URLs for the same station (prevents unavailable station lo-fi girl no need for alternates)
-    // Also used when the station is a video so it can be used to start an random video to not get the same video every time
-    isVideo: false, // Used to determine if the station is a video true = video false = live stream
-    tags: ["lofi"], // Tags to determine the background selected
-    image: "/assets/radio/avatar/lofigirl.png",
-  },
-  {
-    name: "Synthwave radio",
-    url: "https://www.youtube.com/watch?v=4xDzrJKXOOY",
-    alternates: [""], // Also part of lo-fi girl so no need for alternates
-    isVideo: false,
-    tags: ["synthwave", "lofi"],
-    image: "/assets/radio/avatar/lofigirl.png", // placeholder
-  },
-  {
-    name: "Lofi Girl Medieval Fantasy",
-    url: "",
-    tags: ["medievallofi"],
-    alternates: [""], // 100% available so no need for alternates
-    isVideo: true,
-    image: "/assets/radio/avatar/lofigirl.png", // placeholder
-  },
-  {
-    name: "Doom Music",
-    url: "https://www.youtube.com/watch?v=JEuAYnjtJP0",
-    tags: ["metal"],
-    alternates: [""], // 100% available so no need for alternates
-    isVideo: false,
-    image: "/assets/radio/avatar/doommusic.png", // placeholder
-  },
-  {
-    name: "MineCraft Chill Music",
-    url: "https://www.youtube.com/watch?v=ANkxRGvl1VY",
-    tags: ["minecraft"],
-    alternates: [""], // 100% available so no need for alternates
-    isVideo: true,
-    image: "/assets/radio/avatar/minemuisic.png", // placeholder
-  },
-  {
-    name: "MedievaLofi",
-    url: "https://youtu.be/eEZF9iIv5XM",
-    tags: ["medievallofi"],
-    alternates: [""], // 100% available so no need for alternates
-    isVideo: false,
-    image: "/assets/radio/avatar/medievallofi.jpg", // placeholder
-  },
-  // {
-  //   name: "Beats to sleep/chill",
-  //   url: "https://www.youtube.com/watch?v=rUxyKA_-grg",
-  //   tags: ["lofi"],
-  //   image: "/assets/radio/avatar/lofigirl.png", // placeholder
-  // },
-  {
-    name: "90s City Pop",
-    url: "https://www.youtube.com/watch?v=zXHS92Nirfo",
-    tags: ["citypop90s"],
-    // https://youtu.be/r_wfUZVG1-o
-    alternates: ["https://www.youtube.com/watch?v=rThoOgLws_c"],
-    isVideo: true,
-    image: "/assets/radio/avatar/animastudio.jpg", // placeholder
-  },
-  {
-    name: "70s City Pop",
-    url: "https://www.youtube.com/watch?v=wc_yZjn8JWs",
-    tags: ["citypop70s"],
-    alternates: [""], // 100% available so no need for alternates
-    isVideo: false,
-    image: "/assets/radio/avatar/animastudio.jpg", // placeholder
-  },
-  // {
-  //     name: "Pokemon Lofi",
-  //     url: "https://www.youtube.com/watch?v=6CjpgFOOtuI",
-  //     tags: ["lofi"],
-  //     image: "/assets/radio/avatar/lofigirl.png", // placeholder
-  // },
-
-  // {
-  //     name: "Lonelyboy",
-  //     url: "https://www.youtube.com/@lonelyboyxyz",
-  //     image: "/assets/radio/avatar/lofigirl.png", // placeholder
-  // },
-  // {
-  //     name: "Lofi geek",
-  //     url: "https://www.youtube.com/watch?v=ma4TtvgyBQ4",
-  //     image: "/assets/radio/avatar/lofigirl.png", // placeholder
-  // },
-  // {
-  //     name: "LOFI Galaxy",
-  //     url: "https://www.youtube.com/channel/UCgyqgNSc6XMv1Nidr-jDJeg",
-  //     image: "/assets/radio/avatar/lofigirl.png", // placeholder
-  // },
-  // {
-  //     name: "Lucid Rhythms",
-  //     url: "https://www.youtube.com/@LucidRhythms",
-  //     image: "/assets/radio/avatar/lofigirl.png", // placeholder
-  // },
-];
 
 interface LofiRadioProps {
   // station: { name: string; url: string; image: string };
@@ -406,6 +93,97 @@ const LofiRadio: React.FC<LofiRadioProps> = ({
   );
 };
 
+/*
+Get the weather data from the OpenWeatherMap API
+from the user's location
+*/ 
+async function getWeatherData() {
+  // Get the user's location
+  let latitude = 0;
+  let longitude = 0;
+  navigator.geolocation.getCurrentPosition((position) => {
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
+  });
+
+  // Fetch the weather data
+  const response = await fetch(
+    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m`
+  );
+
+  const data = await response.json();
+
+  return data;
+}
+
+function getTimeOfDayIcon(timeOfDay: string) {
+  switch (timeOfDay) {
+    case "morning":
+      return <FiSunrise />;
+    case "afternoon":
+      return <FiSun />;
+    case "evening":
+      return <FiSunset />;
+    case "night":
+      return <FiSunset />;
+    default:
+      return <FiSun />;
+  }
+}
+
+// interface WeatherProps {
+//   latitude: number,
+//   longitude: number,
+//   temperature: number,
+//   windSpeed: number,
+//   generationtime_ms: number,
+//   utc_offset_seconds: number,
+//   timezone: string,
+//   timezone_abbreviation: string,
+//   elevation: number,
+//   current_units: {
+//     time: string,
+//     interval: string,
+//     temperature_2m: string,
+//     wind_speed_10m: string,
+//   },
+//   current: {
+//     time: string,
+//     interval: number,
+//     temperature_2m: number,
+//     wind_speed_10m: number,
+//   },
+//   hourly_units: {
+//     time: string,
+//     temperature_2m: string,
+//     relative_humidity_2m: string,
+//     wind_speed_10m: string,
+//   },
+//   hourly: {
+//     time: string[],
+//     temperature_2m: number[],
+//     relative_humidity_2m: number[],
+//     wind_speed_10m: number[],
+//   },
+// }
+
+function calculateTimeOfDay() {
+  // Use date time
+  const time = new Date();
+  const hours = time.getHours();
+
+  // Determine the time of day
+  if (hours >= 6 && hours < 12) {
+    return "morning";
+  } else if (hours >= 12 && hours < 18) {
+    return "afternoon";
+  } else if (hours >= 18 && hours < 24) {
+    return "evening";
+  } else {
+    return "night";
+  }
+}
+
 const RadioPage = () => {
   const [stationIndex, setStationIndex] = useState(0);
   const [stationSource, setStationSource] = useState(
@@ -415,37 +193,85 @@ const RadioPage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [volumeValue, setVolumeValue] = useState(0.5);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const [currentTime, setCurrentTime] = useState("00:00");
+
+  const [weatherData, setWeatherData] = useState({
+    latitude: 0,
+    longitude: 0,
+    temperature: 0,
+    windSpeed: 0,
+    generationtime_ms: 0,
+    utc_offset_seconds: 0,
+    timezone: "",
+    timezone_abbreviation: "",
+    elevation: 0,
+    current_units: {
+      time: "",
+      interval: "",
+      temperature_2m: "",
+      wind_speed_10m: "",
+    },
+    current: {
+      time: "",
+      interval: 0,
+      temperature_2m: 0,
+      wind_speed_10m: 0,
+    },
+    hourly_units: {
+      time: "",
+      temperature_2m: "",
+      relative_humidity_2m: "",
+      wind_speed_10m: "",
+    },
+    hourly: {
+      time: [""],
+      temperature_2m: [0],
+      relative_humidity_2m: [0],
+      wind_speed_10m: [0],
+    },
+  });
+
+  const [station, setStationdata] = useState([
+    {
+      name: "",
+      url: "",
+      tags: [""],
+      alternates: [""],
+      isVideo: false,
+      image: "",
+    }
+  ]);
+  useEffect(() => {
+    fetch("/assets/radio/data/stations.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setStationdata(data);
+      });
+  }, []);
+
+  // Update the current time every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const date = new Date();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      setCurrentTime(
+        `${hours < 10 ? "0" + hours : hours}:${minutes < 10 ? "0" + minutes : minutes}`
+      );
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    getWeatherData().then((data) => {
+      setWeatherData(data);
+    });
+  }, []);
+
 
   const id = "1336281479713521755";
-
-  // const [currentTag, setCurrentTag] = useState("lofi"); // Default tag
-  const [currentBackground, setCurrentBackground] = useState(
-    "/assets/radio/background/tokyo.gif"
-  ); // Default background
-  // let currentTag = "";
-  // let randomBackground = "";
-
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleMuteToggle = () => {
-    setIsMuted((prev) => !prev);
-  };
-
-  const handlePlay = () => {
-    setIsPlaying(true); // Ensure state is explicitly set to true
-  };
-
-  const handlePause = () => {
-    setIsPlaying(false); // Ensure state is explicitly set to false
-  };
-
-  const handleEnd = () => {
-    setIsPlaying(false);
-  };
-
   // Discord RPC
   const scopes = [
     "rpc",
@@ -469,6 +295,30 @@ const RadioPage = () => {
       instance: false,
     });
   });
+
+  const [currentBackground, setCurrentBackground] = useState(
+    "/assets/radio/background/tokyo.gif"
+  ); // Default background
+
+  const handlePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleMuteToggle = () => {
+    setIsMuted((prev) => !prev);
+  };
+
+  const handlePlay = () => {
+    setIsPlaying(true); // Ensure state is explicitly set to true
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false); // Ensure state is explicitly set to false
+  };
+
+  const handleEnd = () => {
+    setIsPlaying(false);
+  };
 
   function setStation(index: number) {
     const currentStation = station[index];
@@ -725,78 +575,8 @@ const RadioPage = () => {
   };
 
 
-  // Drawer to add new stations
-  // will pop up a drawer from bottom to add new stations
-  // Add a new station to the list of stations and it will be saved in the local storage
-
-  function addStation(bgpath: string, name: string, url: string) {
-    let newStation = {
-      name: name,
-      url: url,
-      alternates: [""], // Extra URLs for the same station (prevents unavailable station lo
-      // Also used when the station is a video so it can be used to start an random video to not get the same video every time
-      isVideo: false, // Used to determine if the station is a video true = video false = live stream
-      tags: ["lofi"], // Tags to determine the background selected
-      image: bgpath,
-    };
-    
-    station.push(newStation);
-
-    // Save the new station to the local storage
-    localStorage.setItem("stations", JSON.stringify(station));
-  }
-
-  interface AddStationDrawerProps {
-    trigger?: boolean;
-  }
-
-  const AddStationDrawer: React.FC<AddStationDrawerProps> = ({trigger = false}) => {
-    return (
-      <DrawerRoot placement={"bottom"} open={trigger}>
-        <DrawerContent>
-          <DrawerCloseTrigger>
-            <button>Close</button>
-          </DrawerCloseTrigger>
-          <DrawerHeader>
-            <DrawerTitle>Add a new station</DrawerTitle>
-          </DrawerHeader>
-          <DrawerBody>
-            <div className="flex flex-col gap-4 items-center">
-              <input
-                type="text"
-                placeholder="Station Name"
-                className="bg-gray-800 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                placeholder="Station URL"
-                className="bg-gray-800 rounded-lg p-2"
-              />
-              <input
-                type="text"
-                placeholder="Station Image URL"
-                className="bg-gray-800 rounded-lg p-2"
-              />
-              <button
-                className="bg-gray-800 rounded-lg p-2"
-                onClick={() => {
-                  addStation("bgpath", "name", "url");
-                }}
-              >
-                Add Station
-              </button>
-            </div>
-          </DrawerBody>
-          <DrawerFooter>
-            <button>Save</button>
-          </DrawerFooter>
-        </DrawerContent>
-      </DrawerRoot>
-    );
-  };
-
-
-  interface SideStationsProps {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  interface SideStationsProps extends Record<string, never> {}
 
   const SideStations: React.FC<SideStationsProps> = ({}) => {
     return (
@@ -808,13 +588,9 @@ const RadioPage = () => {
           gap: "20px",
           margin: "1px",
           backgroundColor: "rgb(0, 0, 0)",
-          // Border radius 5px
           borderRadius: "10px",
         }}
       >
-        {/* 
-          List of stations on sidebar
-          */}
         <div
           style={{
             display: "flex",
@@ -824,63 +600,21 @@ const RadioPage = () => {
             overflowY: "scroll",
             maxHeight: "90vh",
             padding: "5px",
-            // Scrollbar on the left
             scrollbarWidth: "thin",
             scrollbarColor: "rgba(255, 255, 255, 0.5) rgba(0, 0, 0, 0.5)",
             msScrollbarTrackColor: "rgba(0, 0, 0, 0.5)",
             msScrollbarFaceColor: "rgba(255, 255, 255, 0.5)",
           }}
         >
-          <h1
-            className="
-              text-4xl
-              font-jetbrains
-              fixed pb-4
-              "
-          >
-            Stations
-          </h1>
-
-        {/* 
-        Here has a button where user can add a new custom station to the list
-        */}
-
-          <div className="flex flex-col gap-4 items-center pt-14">
-            <button
-              className="bg-gray-800 rounded-lg
-              transition duration-500 ease-in-out hover:bg-gray-700
-              transform hover:scale-105
-              bg-opacity-50
-              "
-              style={{
-                width: "100%",
-                minWidth: "200px",
-                minHeight: "70px",
-                padding: "6px",
-              }}
-
-              onClick={() => {
-                setIsDrawerOpen(true);
-              }}
-            >
-              Add a new station
-            </button>
-          </div>
-          <div
-            className="flex flex-col gap-4 items-start
-            pt-14
-            p-4
-            "
-          >
+          <div className="flex flex-col gap-4 items-start p-4">
             {station.map((station, index) => (
               <div
                 key={index}
                 className="flex flex-row gap-4 items-center
-              bg-gray-800 rounded-lg 
-              transition duration-500 ease-in-out hover:bg-gray-700
-              transform hover:scale-105
-              bg-opacity-50
-              "
+                bg-gray-800 rounded-lg 
+                transition duration-500 ease-in-out hover:bg-gray-700
+                transform hover:scale-105
+                bg-opacity-50"
                 style={{
                   width: "100%",
                   minWidth: "200px",
@@ -903,7 +637,6 @@ const RadioPage = () => {
                   className="text-xl font-jetbrains"
                 >
                   {
-                    // If overflow the name will be cut
                     station.name.length > 10
                       ? station.name.substring(0, 10) + "..."
                       : station.name
@@ -917,13 +650,38 @@ const RadioPage = () => {
     );
   };
 
+  const Extras = () => {
+    return (
+      <div className="flex flex-col gap-4 items-center m-4 w-full
+      aling-start
+      ">
+        <div className="flex flex-row gap-4 items-center bg-gray-800 p-4 rounded-lg w-full 
+        justify-start
+        ">
+          <div className="flex flex-row gap-2 align-items-center justify-items-center">
+            <h1 className="text-2xl font-jetbrains text-start">
+              {currentTime}
+            </h1>
+            <h1 className="text-3xl font-jetbrains text-start">
+              {getTimeOfDayIcon(calculateTimeOfDay())}
+            </h1>
+          </div>
+          <div className="flex flex-row gap-2 align-items-center justify-items-center">
+            <h1 className="text-2xl font-jetbrains text-start">
+              {weatherData.current.temperature_2m}°C
+            </h1>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <BackgroundRender currentBackground={currentBackground}>
       <div
         style={{
           display: "flex",
           flexDirection: "row",
-          // Align between the two columns
           justifyContent: "space-between",
           gap: "20px",
         }}
@@ -962,15 +720,13 @@ const RadioPage = () => {
             station={station}
             stationIndex={stationIndex}
           />
+
+          <Extras />
         </div>
         <div>
           <SideStations />
         </div>
       </div>
-
-        {/* esta div 
-        deve estar fora do container para que o drawer possa ser renderizado sem interferir no layout
-        */}
     </BackgroundRender>
   );
 };

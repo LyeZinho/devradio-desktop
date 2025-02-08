@@ -23,9 +23,11 @@ import { FiSkipForward } from "react-icons/fi";
 import { FiSkipBack } from "react-icons/fi";
 
 // Extra icons
-import { FiSun } from "react-icons/fi";
-import { FiSunrise } from "react-icons/fi";
-import { FiSunset } from "react-icons/fi";
+// import { FiSun } from "react-icons/fi";
+// import { FiSunrise } from "react-icons/fi";
+// import { FiSunset } from "react-icons/fi";
+// import { FiMoon } from "react-icons/fi";
+// import { sub } from "framer-motion/client";
 
 type Backgrounds = {
   [key: string]: string[];
@@ -93,96 +95,133 @@ const LofiRadio: React.FC<LofiRadioProps> = ({
   );
 };
 
-/*
-Get the weather data from the OpenWeatherMap API
-from the user's location
-*/ 
-async function getWeatherData() {
-  // Get the user's location
-  let latitude = 0;
-  let longitude = 0;
-  navigator.geolocation.getCurrentPosition((position) => {
-    latitude = position.coords.latitude;
-    longitude = position.coords.longitude;
-  });
-
-  // Fetch the weather data
-  const response = await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m`
-  );
-
-  const data = await response.json();
-
-  return data;
-}
-
-function getTimeOfDayIcon(timeOfDay: string) {
-  switch (timeOfDay) {
-    case "morning":
-      return <FiSunrise />;
-    case "afternoon":
-      return <FiSun />;
-    case "evening":
-      return <FiSunset />;
-    case "night":
-      return <FiSunset />;
-    default:
-      return <FiSun />;
-  }
-}
-
-// interface WeatherProps {
-//   latitude: number,
-//   longitude: number,
-//   temperature: number,
-//   windSpeed: number,
-//   generationtime_ms: number,
-//   utc_offset_seconds: number,
-//   timezone: string,
-//   timezone_abbreviation: string,
-//   elevation: number,
-//   current_units: {
-//     time: string,
-//     interval: string,
-//     temperature_2m: string,
-//     wind_speed_10m: string,
-//   },
-//   current: {
-//     time: string,
-//     interval: number,
-//     temperature_2m: number,
-//     wind_speed_10m: number,
-//   },
-//   hourly_units: {
-//     time: string,
-//     temperature_2m: string,
-//     relative_humidity_2m: string,
-//     wind_speed_10m: string,
-//   },
-//   hourly: {
-//     time: string[],
-//     temperature_2m: number[],
-//     relative_humidity_2m: number[],
-//     wind_speed_10m: number[],
-//   },
+// function getTimeOfDayIcon(timeOfDay: string) {
+//   switch (timeOfDay) {
+//     case "morning":
+//       return <FiSunrise />;
+//     case "afternoon":
+//       return <FiSun />;
+//     case "evening":
+//       return <FiSunset />;
+//     case "night":
+//       return <FiMoon />;
+//     default:
+//       return <FiSun />;
+//   }
 // }
 
-function calculateTimeOfDay() {
-  // Use date time
-  const time = new Date();
-  const hours = time.getHours();
+// function getSomeAdvice() {
+//   const advice = [
+//     "Drink some water!",
+//     "Take a break and stretch!",
+//     "Remember to breathe!",
+//     "You're doing great!",
+//     "Don't forget to eat!",
+//     "Take a moment to relax!",
+//     "You're awesome!",
+//     "Take a break and walk around!",
+//     "Stay hydrated!",
+//     "Nice job!",
+//     "Pause and look out the window!",
+//     "Your hard work is paying off!",
+//     "Keep going—you’ve got this!",
+//     "Smiling is contagious—try it!",
+//     "Be kind to yourself today.",
+//     "Step outside for a moment of fresh air.",
+//     "Turn your phone off for a bit.",
+//     "Celebrate small wins!",
+//     "It’s okay to take things slow.",
+//     "Enjoy the moment—you're here for it.",
+//     "Write down something you’re grateful for.",
+//     "Progress, not perfection.",
+//     "You’re braver than you believe.",
+//     "Focus on what makes you happy.",
+//     "Take a deep breath in… and out.",
+//     "Treat yourself to a little break.",
+//     "It’s okay to rest—you deserve it.",
+//     "Listen to your favorite track again.",
+//     "Small steps lead to big changes.",
+//     "Take time to care for your mind.",
+//     "Make today a good one.",
+//     "Your energy is inspiring.",
+//     "Light a candle or turn on some cozy lighting.",
+//     "Stay curious—it’s a superpower.",
+//     "Send someone you love a quick text.",
+//     "Give yourself permission to relax.",
+//     "Don’t overthink—just enjoy the vibe.",
+//     "Dance like no one’s watching!",
+//     "Take a few minutes to doodle or journal.",
+//     "You’re stronger than you think.",
+//     "Try some deep breathing for 30 seconds.",
+//     "Appreciate the little things today.",
+//     "Let the music carry your worries away.",
+//     "Good vibes are coming your way.",
+//     "Every moment is a fresh start.",
+//     "Be proud of how far you’ve come.",
+//     "Put on a cozy sweater or blanket.",
+//     "It’s okay to make mistakes—keep learning.",
+//     "Your vibe is immaculate.",
+//     "Let your creativity flow.",
+//     "Take time to organize your thoughts.",
+//     "Trust the process—it’s worth it.",
+//     "Sometimes less is more. Simplify today.",
+//     "Fuel your body with something healthy.",
+//     "Your future self is cheering you on.",
+//     "Smile—it looks good on you!",
+//     "Be present in the moment.",
+//     "Every day is a chance to grow.",
+//     "Keep your chin up—you’re amazing!"
+//   ];
 
-  // Determine the time of day
-  if (hours >= 6 && hours < 12) {
-    return "morning";
-  } else if (hours >= 12 && hours < 18) {
-    return "afternoon";
-  } else if (hours >= 18 && hours < 24) {
-    return "evening";
-  } else {
-    return "night";
-  }
-}
+//   return advice[Math.floor(Math.random() * advice.length)];
+// }
+
+// 'https://openlibrary.org/
+// Daily book recommendation
+// function getBookRecommendation() {
+//   let genres = [
+//     "https://openlibrary.org/subjects/fiction.json",
+//     "https://openlibrary.org/subjects/nonfiction.json",
+//     "https://openlibrary.org/subjects/fantasy.json",
+//     "https://openlibrary.org/subjects/mystery.json",
+//     "https://openlibrary.org/subjects/romance.json",
+//     "https://openlibrary.org/subjects/science_fiction.json",
+//     "https://openlibrary.org/subjects/horror.json",
+//     "https://openlibrary.org/subjects/history.json",
+//   ]
+
+//   let book = {
+//     title: "",
+//     subject: [""],
+//     authors: [{ name: "" }],
+//     first_publish_year: 0,
+//     cover_id: 0,
+//   };
+
+//   fetch(genres[Math.floor(Math.random() * genres.length)])
+//     .then((response) => response.json())
+//     .then((data) => {
+//       book = data.works[Math.floor(Math.random() * data.works.length)];
+//     });
+
+//   return book;
+// }
+// function calculateTimeOfDay() {
+//   // Use date time
+//   const time = new Date();
+//   const hours = time.getHours();
+
+//   // Determine the time of day
+//   if (hours >= 6 && hours < 12) {
+//     return "morning";
+//   } else if (hours >= 12 && hours < 18) {
+//     return "afternoon";
+//   } else if (hours >= 18 && hours < 24) {
+//     return "evening";
+//   } else {
+//     return "night";
+//   }
+// }
 
 const RadioPage = () => {
   const [stationIndex, setStationIndex] = useState(0);
@@ -193,44 +232,17 @@ const RadioPage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [volumeValue, setVolumeValue] = useState(0.5);
+  // const [advice, setAdvice] = useState("");
 
-  const [currentTime, setCurrentTime] = useState("00:00");
+  // const [currentTime, setCurrentTime] = useState("00:00");
 
-  const [weatherData, setWeatherData] = useState({
-    latitude: 0,
-    longitude: 0,
-    temperature: 0,
-    windSpeed: 0,
-    generationtime_ms: 0,
-    utc_offset_seconds: 0,
-    timezone: "",
-    timezone_abbreviation: "",
-    elevation: 0,
-    current_units: {
-      time: "",
-      interval: "",
-      temperature_2m: "",
-      wind_speed_10m: "",
-    },
-    current: {
-      time: "",
-      interval: 0,
-      temperature_2m: 0,
-      wind_speed_10m: 0,
-    },
-    hourly_units: {
-      time: "",
-      temperature_2m: "",
-      relative_humidity_2m: "",
-      wind_speed_10m: "",
-    },
-    hourly: {
-      time: [""],
-      temperature_2m: [0],
-      relative_humidity_2m: [0],
-      wind_speed_10m: [0],
-    },
-  });
+  // const [dailyBook, setDailyBook] = useState({
+  //   title: "",
+  //   subject: [""],
+  //   authors: [{ name: "" }],
+  //   first_publish_year: 0,
+  //   cover_id: 0,
+  // });
 
   const [station, setStationdata] = useState([
     {
@@ -242,6 +254,9 @@ const RadioPage = () => {
       image: "",
     }
   ]);
+
+  // Get daily book recommendation
+
   useEffect(() => {
     fetch("/assets/radio/data/stations.json")
       .then((res) => res.json())
@@ -250,26 +265,19 @@ const RadioPage = () => {
       });
   }, []);
 
-  // Update the current time every second
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const date = new Date();
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      setCurrentTime(
-        `${hours < 10 ? "0" + hours : hours}:${minutes < 10 ? "0" + minutes : minutes}`
-      );
-    }, 1000);
+  // // Update the current time every second
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     const date = new Date();
+  //     const hours = date.getHours();
+  //     const minutes = date.getMinutes();
+  //     setCurrentTime(
+  //       `${hours < 10 ? "0" + hours : hours}:${minutes < 10 ? "0" + minutes : minutes}`
+  //     );
+  //   }, 1000);
 
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    getWeatherData().then((data) => {
-      setWeatherData(data);
-    });
-  }, []);
-
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const id = "1336281479713521755";
   // Discord RPC
@@ -337,6 +345,8 @@ const RadioPage = () => {
         Math.floor(Math.random() * backgrounds[currentTag].length)
       ];
 
+    // setAdvice("🌟 " + getSomeAdvice());
+
     setCurrentBackground(randomBackground);
   }
 
@@ -377,30 +387,6 @@ const RadioPage = () => {
     }
     setVolumeValue(volume);
   }
-
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      switch (e.key) {
-        case "m":
-          handleMuteToggle();
-          break;
-        case "ArrowRight":
-          handleNextStation();
-          break;
-        case "ArrowLeft":
-          handlePrevStation();
-          break;
-        default:
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyPress);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, []); 
 
   const BackgroundRender: React.FC<{
     children: React.ReactNode;
@@ -655,7 +641,7 @@ const RadioPage = () => {
       <div className="flex flex-col gap-4 items-center m-4 w-full
       aling-start
       ">
-        <div className="flex flex-row gap-4 items-center bg-gray-800 p-4 rounded-lg w-full 
+        {/* <div className="flex flex-row gap-4 items-center bg-gray-800 p-4 rounded-lg w-full 
         justify-start
         ">
           <div className="flex flex-row gap-2 align-items-center justify-items-center">
@@ -665,13 +651,11 @@ const RadioPage = () => {
             <h1 className="text-3xl font-jetbrains text-start">
               {getTimeOfDayIcon(calculateTimeOfDay())}
             </h1>
-          </div>
-          <div className="flex flex-row gap-2 align-items-center justify-items-center">
-            <h1 className="text-2xl font-jetbrains text-start">
-              {weatherData.current.temperature_2m}°C
+            <h1 className="text-md font-jetbrains text-start align-content-center">
+              {advice}
             </h1>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   };
@@ -686,7 +670,10 @@ const RadioPage = () => {
           gap: "20px",
         }}
       >
-        <div>
+        <div> 
+          <h1 className="text-2xl font-jetbrains text-center h-48">
+            {/* <span className="text-3xl font-jetbrains bg-black p-2">Dev&apos;s Radio📻</span> */}
+          </h1>
           <div>
             <LofiRadio
               stationSource={stationSource}
